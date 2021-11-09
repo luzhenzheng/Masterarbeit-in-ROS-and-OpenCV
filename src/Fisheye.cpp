@@ -531,20 +531,20 @@ const vector<cv::Mat>& maskTemplates,const int step)
 
 		//-----------------------------------
 		//for exposure compensation
-		cv::Point point1(0, 0);
-		cv::Point point2(0, 0);
-		cv::Point point3(0, 0);
-		vector<cv::Point> corners{ point1,point2,point3};
-		cv::Ptr<cv::detail::ExposureCompensator> compensator
-			= cv::detail::ExposureCompensator::createDefault(cv::detail::ExposureCompensator::GAIN);
-		cv::UMat mask1, mask2, mask3;
-		vector<cv::UMat>masks{ mask1,mask2,mask3};
+		// cv::Point point1(0, 0);
+		// cv::Point point2(0, 0);
+		// cv::Point point3(0, 0);
+		// vector<cv::Point> corners{ point1,point2,point3};
+		// cv::Ptr<cv::detail::ExposureCompensator> compensator
+		// 	= cv::detail::ExposureCompensator::createDefault(cv::detail::ExposureCompensator::GAIN);
+		// cv::UMat mask1, mask2, mask3;
+		// vector<cv::UMat>masks{ mask1,mask2,mask3};
 
-		for (int i = 0; i < masks.size(); ++i)
-		{
-			masks[i].create(warpingTemplates[0].size(), CV_8U);
-			masks[i].setTo(cv::Scalar::all(255));
-		}
+		// for (int i = 0; i < masks.size(); ++i)
+		// {
+		// 	masks[i].create(warpingTemplates[0].size(), CV_8U);
+		// 	masks[i].setTo(cv::Scalar::all(255));
+		// }
 		//------------------------------------
 
 
