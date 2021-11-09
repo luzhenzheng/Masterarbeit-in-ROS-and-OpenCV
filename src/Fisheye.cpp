@@ -547,9 +547,13 @@ const vector<cv::Mat>& maskTemplates,const int step)
 		// }
 		//------------------------------------
 
-
+		double latency_total=0.0;
+		int latency_cnt=0;
 		while (ros::ok())
 		{	
+			auto start_latency = cv::getTickCount();
+
+
 			//get currentFrameHeight, if not equal to initialFrameHeight then break the loop and start over from create_corresponding_landmarks() again
 			int currentFrameHeight1=listener.m_frame1.rows;
 			int currentFrameWidth1=listener.m_frame1.cols; 
@@ -591,6 +595,12 @@ const vector<cv::Mat>& maskTemplates,const int step)
 				frame1_warped, frame2_warped, frame3_warped, frame_pano);
 
 		
+			auto end_latency=cv::getTickCount();
+			auto latency=(end_latency-start_latency)/cv::getTickFrequency();
+			latency_total+=latency;
+			++latency_cnt;
+			auto average_latency=latency_total/latency_cnt;
+			ROS_INFO("latency: %f sec",latency);
 
 			//exposure compensation!
 			//exposure_compensate(frame1_warped, frame2_warped, frame3_warped,corners,masks,compensator);
@@ -606,7 +616,7 @@ const vector<cv::Mat>& maskTemplates,const int step)
 
 			size_t megaBytes_per_sec = (frame_pano.total() * frame_pano.elemSize())*fps/1000000.0;
 			cv::putText(frame_pano, "MB/s: " + to_string(megaBytes_per_sec), cv::Point(100, 200), cv::FONT_HERSHEY_PLAIN, 4, cv::Scalar(0, 255, 0), 3);
-
+			cv::putText(frame_pano,"latency: "+to_string(average_latency),cv::Point(100,300),cv::FONT_HERSHEY_PLAIN,4,cv::Scalar(0, 255, 0), 3);
 			//cv::putText(frame_pano, to_string(landmarks_amount) + " landmarks", cv::Point(100, 100), cv::FONT_HERSHEY_PLAIN, 4, cv::Scalar(0, 255, 0), 3);
 			cv::putText(frame_pano, "FPS: " + to_string(int(fps)), cv::Point(100, 100), cv::FONT_HERSHEY_PLAIN, 4, cv::Scalar(0, 255, 0), 3);
 			//cv::imshow("frame_pano", frame_pano);
